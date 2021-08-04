@@ -1,12 +1,12 @@
 
 services:
-  nest:
-    build: .
-    ports:
-      - "3000:3000"
-    depends_on:
-      mysql:
-        condition: service_healthy
+  # nest:
+  #   build: .
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     mysql:
+  #       condition: service_healthy
   mysql:
     image: mysql:8.0.25
     ports:
