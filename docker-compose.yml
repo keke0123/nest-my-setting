@@ -16,18 +16,27 @@ services:
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
+    #   - sh /entrypoint.sh
+    #   - BASE_PATH="migration" MYSQL_DRIVER="mysql" sh /migration/migration.sh
+    # command: BASE_PATH="migration" MYSQL_DRIVER="mysql" sh /migration/migration.sh; sh /entrypoint.sh;
+    # entrypoint:
+    #   - /bin/bash
+    #   - -c
+    #   - "BASE_PATH="migration" MYSQL_DRIVER="mysql" /migration/migration.sh; --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci /entrypoint.sh"
     environment:
       - MYSQL_ROOT_PASSWORD=wjdgyqja88
       - MYSQL_ROOT_HOST=%
     volumes:
-      - ./migration:/migration
-      - ./mysql/my.cnf:~/my.cnf
+      # - ./migration:/migration
+      - ./migration:/docker-entrypoint-initdb.d/
+      # - ./mysql/my.cnf:/root/my.cnf
     healthcheck:
       test: "/usr/bin/mysql --user=root --password=wjdgyqja88 --execute \"SHOW DATABASES;\""
       interval: 10s
       timeout: 10s
       retries: 10
       start_period: 5s
+
       # test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$$(cat $${FILE__MYSQL_ROOT_PASSWORD}) 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
   # mysql-migrations:
   #   depends_on:
