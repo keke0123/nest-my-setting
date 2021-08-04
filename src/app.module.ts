@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import configs from './configs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
+import { SampleController } from './controllers/sample/sample.controller';
 
 @Module({
   imports: [
@@ -22,12 +23,14 @@ import { getConnectionOptions } from 'typeorm';
           port: configService.get('mysql.port'),
           username: configService.get('mysql.username'),
           password: configService.get('mysql.password'),
-          autoLoadEntities: true
+          // autoLoadEntities: true,
+          entities: ["dist/**/mysql/*.entity{.ts,.js}"],
+          synchronize: configService.get('service.env') == 'local' ? true : false,
         }
       }
     }),
   ],
-  controllers: [AppController],
+  controllers: [AppController, SampleController],
   providers: [AppService],
 })
 export class AppModule {
