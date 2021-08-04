@@ -1,0 +1,36 @@
+# version: "3.8"
+
+services:
+  nest:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      # - mysql
+      mysql:
+        condition: service_healthy
+  mysql:
+    image: mysql:8.0.25
+    ports:
+      - "3307:3306"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      - MYSQL_ROOT_PASSWORD=wjdgyqja88
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - ./migration:/migration
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=wjdgyqja88 --execute \"SHOW DATABASES;\""
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 5s
+      # test: out=$$(mysqladmin ping -h localhost -P 3306 -u root --password=$$(cat $${FILE__MYSQL_ROOT_PASSWORD}) 2>&1); echo $$out | grep 'mysqld is alive' || { echo $$out; exit 1; }
+  # mysql-migrations:
+  #   depends_on:
+  #     - mysql
+    
+
+  # docker-compose exec db psql postgres postgres
