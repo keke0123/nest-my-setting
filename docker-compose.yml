@@ -21,6 +21,7 @@ services:
       - MYSQL_ROOT_HOST=%
     volumes:
       - ./migration:/migration
+      - ./mysql/my.cnf:~/my.cnf
     healthcheck:
       test: "/usr/bin/mysql --user=root --password=wjdgyqja88 --execute \"SHOW DATABASES;\""
       interval: 10s
