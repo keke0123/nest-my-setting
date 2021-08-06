@@ -1,4 +1,5 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { ServiceException } from 'src/utils/service-exception';
 
 const ErrorType = {
@@ -18,6 +19,12 @@ const ErrorType = {
 export class GlobalExceptionFilter<T> implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
+  private config: ConfigService;
+
+  constructor(config: ConfigService) {
+    this.config = config;
+  };
+
   catch(exception: T, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
@@ -33,7 +40,7 @@ export class GlobalExceptionFilter<T> implements ExceptionFilter {
       status = exception.getStatus();
       name = ErrorType[status] || 'INTERNAL_SERVER_ERROR';
       message = exception.message;
-      stack = exception.stack;
+      stack = this.config.get('service.env') == 'local' ? exception.stack : undefined;
     }
 
     this.logger.error(`${name}`, stack, JSON.stringify({

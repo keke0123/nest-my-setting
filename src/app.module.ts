@@ -13,7 +13,7 @@ import { ServiceException } from './utils/service-exception';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      load: [ configs ]
+      load: [ configs ],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -35,7 +35,6 @@ import { ServiceException } from './utils/service-exception';
   controllers: [AppController, SampleController],
   providers: [
     AppService,
-    ServiceException,
   ],
 })
 export class AppModule {
