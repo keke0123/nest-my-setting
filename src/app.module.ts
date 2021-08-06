@@ -8,6 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { getConnectionOptions } from 'typeorm';
 import { SampleController } from './controllers/sample/sample.controller';
 
+import { ServiceException } from './utils/service-exception';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -31,7 +33,10 @@ import { SampleController } from './controllers/sample/sample.controller';
     }),
   ],
   controllers: [AppController, SampleController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    ServiceException,
+  ],
 })
 export class AppModule {
   private readonly logger = new Logger(AppModule.name);
