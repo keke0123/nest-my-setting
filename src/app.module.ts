@@ -9,6 +9,9 @@ import { getConnectionOptions } from 'typeorm';
 import { SampleController } from './controllers/sample/sample.controller';
 
 import { ServiceException } from './utils/service-exception';
+import { SlackService } from './services/slack/slack.service';
+
+import { PROVIDE } from './references';
 
 @Module({
   imports: [
@@ -35,6 +38,13 @@ import { ServiceException } from './utils/service-exception';
   controllers: [AppController, SampleController],
   providers: [
     AppService,
+    {
+      provide: PROVIDE.SLACK,
+      useFactory: (config: ConfigService) => {
+        return new SlackService(config);
+      },
+      inject: [ConfigService],
+    },
   ],
 })
 export class AppModule {

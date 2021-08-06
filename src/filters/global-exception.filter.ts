@@ -1,5 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { SlackService } from 'src/services/slack/slack.service';
 import { ServiceException } from 'src/utils/service-exception';
 
 const ErrorType = {
@@ -19,11 +20,10 @@ const ErrorType = {
 export class GlobalExceptionFilter<T> implements ExceptionFilter {
   private readonly logger = new Logger(GlobalExceptionFilter.name);
 
-  private config: ConfigService;
-
-  constructor(config: ConfigService) {
-    this.config = config;
-  };
+  constructor(
+    private readonly config: ConfigService, 
+    private readonly slack: SlackService
+  ) {};
 
   catch(exception: T, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -58,6 +58,20 @@ export class GlobalExceptionFilter<T> implements ExceptionFilter {
         stack,
       }
     }));
+
+    // 현재 주석처리
+    // if(status > 499) {
+    //   this.slack.log({ payload: {
+    //     ERROR_NAME: name,
+    //     ERROR_STATUS: status,
+    //     ERROR_MESSAGE: message,
+    //     ERROR_STACK: stack,
+    //     URL: request.url,
+    //     PARAMS: JSON.stringify(request.params),
+    //     QUERY: JSON.stringify(request.query),
+    //     BODY: JSON.stringify(request.body),
+    //   }, type: 'error' })
+    // }
 
     response.status(status).json({
       status,

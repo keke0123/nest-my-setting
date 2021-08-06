@@ -7,5 +7,10 @@ export default {
     port: 3307,
     username: 'root',
     password: 'wjdgyqja88',
-  }
+  },
+  slack: {
+    url: {
+      log: '',
+    }
+  },
 }
