@@ -69,15 +69,16 @@ export const loggerFactory = (config: ConfigService) => {
   return winston.createLogger({
     level: config.get('service.log.level'),
     format: winston.format.json(),
-    defaultMeta: { service: 'user-service' },
+    // defaultMeta: { service: 'user-service' },
     transports: [
       new transports.Console({
         format: format.combine(
           format.json(),
           format.timestamp(),
           format.colorize(),
-          format.simple(),
-          // pretty(config.get('service.env')),
+          config.get(`service.env`) == 'local' 
+            ? pretty(config.get('service.env'))
+            : format.simple(),
         )
       })
     ],
@@ -88,11 +89,12 @@ const pretty = (env: string) => {
   return format.printf((info) => {
     // console.log('info', info);
     // console.log(info[Symbol.for('message')]);
-    // if(env == 'local') {
-    //   // console.log(typeof info.message);
-    //   // util.inspect(object, showHidden=false, depth=2, colorize=true);
-    //   return `[${info.level}]:\x1b[36m${info.timestamp}\x1b[0m:[\x1b[33m${info.service}\x1b[0m]\n${inspect(info.message, false, 10, true)}`;
-    // }
-    return `[${info.level}]:\x1b[36m${info.timestamp}\x1b[0m:[\x1b[33m${info.service}\x1b[0m]${typeof info.message == 'object' ? '\n' : ':'}${info.message}` + `${info['0'] ? '\n' + inspect(info['0'], false, 5, true) : ''}`;
+    const message = `[\x1b[2m${info.timestamp}\x1b[0m]:[${info.level}]:\x1b[36m${info.message}\x1b[0m`;
+    // console.log('typeof info.context', typeof info.context);
+    if(typeof info.context == 'object') {
+      // inspect(info.message, false, 10, true)
+      return message + '\n' + inspect(info.context, false, 10, true);
+    } 
+    return message + ':' + info.context;
   })
 }

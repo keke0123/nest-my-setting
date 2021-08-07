@@ -54,7 +54,7 @@ export class SampleController {
     // @Param('id', ParseIntPipe) id: number,
     // @Query()
   ): Observable<any> {
-    console.log('params', params);
+    this.logger.info('params', params);
     return of({ message: 'success', data: '' });
   }
 
