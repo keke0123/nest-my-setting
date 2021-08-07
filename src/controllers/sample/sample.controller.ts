@@ -1,10 +1,11 @@
-import { Controller, Get, HttpStatus, Inject, LoggerService, Param, Post } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Inject, LoggerService, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { config, Observable, of } from 'rxjs';
 import { CustomLoggerService } from 'src/modules/logger/logger.module';
 import { PROVIDE } from 'src/references';
 
 import { ServiceException } from '../../utils/service-exception';
+import { Validation1Param } from './validation';
 
 @Controller({ path: 'sample'})
 export class SampleController {
@@ -34,12 +35,14 @@ export class SampleController {
   }
 
   @Post('/validation/1/:type/:id')
-  validation1(@Param('type') type: any): Observable<any> {
-    this.logger.debug('type', type);
-    this.logger.debug('type');
-    this.logger.debug({type});
-    // this.logger.info('params', params);
+  validation1(
+    @Param() params: Validation1Param,
+    // @Param('id', ParseIntPipe) id: number,
+    // @Query()
+  ): Observable<any> {
+    console.log('params', params);
     return of({ message: 'success', data: '' });
   }
 
 }
+
