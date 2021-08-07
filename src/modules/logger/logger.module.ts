@@ -28,7 +28,7 @@ export class CustomLoggerService implements LoggerService {
     if(typeof message == 'object') {
       return this.logger.log('', { context: { ...message, ...context }});
     }
-    return this.logger.log(message, { context });
+    return this.logger.info(message, { context });
   }
   info(message: any, context?: any) {
     if(typeof message == 'object') {
