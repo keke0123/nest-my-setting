@@ -25,21 +25,39 @@ export class CustomLoggerService implements LoggerService {
   constructor(private readonly logger: Logger) {}
 
   log(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.info({ ...message, ...optionalParams });  
+    }
     return this.logger.info(message, optionalParams);
   }
   info(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.info({ ...message, ...optionalParams });  
+    }
     return this.logger.info(message, optionalParams);
   }
   error(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.error({ ...message, ...optionalParams });  
+    }
     return this.logger.error(message, optionalParams);
   }
   warn(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.warn({ ...message, ...optionalParams });  
+    }
     return this.logger.warn(message, optionalParams);
   }
   debug?(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.debug({ ...message, ...optionalParams });  
+    }
     return this.logger.debug(message, optionalParams);
   }
   verbose?(message: any, ...optionalParams: any[]) {
+    if(typeof message == 'object') {
+      return this.logger.verbose({ ...message, ...optionalParams });  
+    }
     return this.logger.verbose(message, optionalParams);
   }
   // setLogLevels?(levels: LogLevel[]) {

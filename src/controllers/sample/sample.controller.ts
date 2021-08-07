@@ -23,7 +23,7 @@ export class SampleController {
   @Get('/error')
   throwError(): Observable<any> {
 
-    this.logger.info({
+    this.logger.info('test', {
       message: 'sample error controller',
       data: '',
     });
