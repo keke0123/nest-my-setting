@@ -26,6 +26,11 @@ export class SampleController {
     description: 'sample default return',
     type: SampleDefaultReturn,
   })
+  @ApiResponse({
+    status: 400,
+    description: 'BAD_REQUEST',
+    // type: SampleDefaultReturn,
+  })
   index(): Observable<SampleDefaultReturn> {
     return of({message: "success", data: ""});
   }
