@@ -1,12 +1,15 @@
 import { Controller, Get, HttpStatus, Inject, LoggerService, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { config, Observable, of } from 'rxjs';
 import { CustomLoggerService } from 'src/modules/logger/logger.module';
 import { PROVIDE } from 'src/references';
+import { SampleDefaultReturn } from 'src/types/dto/sample';
 
 import { ServiceException } from '../../utils/service-exception';
 import { Validation1Param } from './validation';
 
+@ApiTags('sample')
 @Controller({ path: 'sample'})
 export class SampleController {
 
@@ -16,9 +19,15 @@ export class SampleController {
     @Inject(PROVIDE.LOGGER) private readonly logger: CustomLoggerService,
   ) {}
 
+
   @Get()
-  index(): Observable<any> {
-    return of(['hello']);
+  @ApiResponse({
+    status: 200,
+    description: 'sample default return',
+    type: SampleDefaultReturn,
+  })
+  index(): Observable<SampleDefaultReturn> {
+    return of({message: "success", data: ""});
   }
 
   @Get('/error')
