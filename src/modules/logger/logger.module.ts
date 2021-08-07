@@ -55,10 +55,11 @@ export const loggerFactory = (config: ConfigService) => {
     transports: [
       new transports.Console({
         format: format.combine(
+          // format.simple(),
+          format.json(),
           format.colorize(),
-          format.timestamp(),
           format.simple(),
-            pretty(config.get('service.env')),
+          // pretty(config.get('service.env')),
         )
       })
     ],
