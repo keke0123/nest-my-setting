@@ -1,8 +1,10 @@
+import test from './test';
 import local from './local';
 
 const env = process.env.NODE_ENV || 'local';
 
 const configs = {
+  test,
   local,
 }
 
