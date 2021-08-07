@@ -1,6 +1,9 @@
 export default {
   service: {
     env: 'local',
+    log: {
+      level: 'debug'
+    },
   },
   mysql: {
     host: "localhost",

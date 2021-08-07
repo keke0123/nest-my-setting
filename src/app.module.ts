@@ -12,6 +12,7 @@ import { ServiceException } from './utils/service-exception';
 import { SlackService } from './services/slack/slack.service';
 
 import { PROVIDE } from './references';
+import { LoggerModule } from './modules/logger/logger.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { PROVIDE } from './references';
         }
       }
     }),
+    LoggerModule,
   ],
   controllers: [AppController, SampleController],
   providers: [

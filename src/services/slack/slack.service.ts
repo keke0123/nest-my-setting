@@ -13,9 +13,7 @@ export class SlackService {
   
   constructor(
     private readonly config: ConfigService
-  ) {
-    this.config = config;
-  }
+  ) {}
 
   public async log({payload, type = 'info'}: SendObject) {
     let color = 'good';
