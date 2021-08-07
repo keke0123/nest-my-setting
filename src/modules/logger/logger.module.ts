@@ -1,4 +1,4 @@
-import { Module, Injectable, LoggerService, LogLevel } from '@nestjs/common';
+import { Module, Injectable, LoggerService, LogLevel, Param } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as winston from 'winston';
 import { Logger, transports, format } from 'winston';
@@ -24,41 +24,41 @@ export class LoggerModule {}
 export class CustomLoggerService implements LoggerService {
   constructor(private readonly logger: Logger) {}
 
-  log(message: any, ...optionalParams: any[]) {
+  log(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.info({ ...message, ...optionalParams });  
+      return this.logger.log('', { context: { ...message, ...context }});
     }
-    return this.logger.info(message, optionalParams);
+    return this.logger.log(message, { context });
   }
-  info(message: any, ...optionalParams: any[]) {
+  info(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.info({ ...message, ...optionalParams });  
+      return this.logger.info('', { context: { ...message, ...context }});
     }
-    return this.logger.info(message, optionalParams);
+    return this.logger.info(message, { context });
   }
-  error(message: any, ...optionalParams: any[]) {
+  error(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.error({ ...message, ...optionalParams });  
+      return this.logger.error('', { context: { ...message, ...context }});
     }
-    return this.logger.error(message, optionalParams);
+    return this.logger.error(message, { context });
   }
-  warn(message: any, ...optionalParams: any[]) {
+  warn(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.warn({ ...message, ...optionalParams });  
+      return this.logger.warn('', { context: { ...message, ...context }});
     }
-    return this.logger.warn(message, optionalParams);
+    return this.logger.warn(message, { context });
   }
-  debug?(message: any, ...optionalParams: any[]) {
+  debug?(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.debug({ ...message, ...optionalParams });  
+      return this.logger.debug('', { context: { ...message, ...context }});
     }
-    return this.logger.debug(message, optionalParams);
+    return this.logger.debug(message, { context });
   }
-  verbose?(message: any, ...optionalParams: any[]) {
+  verbose?(message: any, context?: any) {
     if(typeof message == 'object') {
-      return this.logger.verbose({ ...message, ...optionalParams });  
+      return this.logger.verbose('', { context: { ...message, ...context }});
     }
-    return this.logger.verbose(message, optionalParams);
+    return this.logger.verbose(message, { context });
   }
   // setLogLevels?(levels: LogLevel[]) {
   //   throw new Error('Method not implemented.');
@@ -74,6 +74,7 @@ export const loggerFactory = (config: ConfigService) => {
       new transports.Console({
         format: format.combine(
           format.json(),
+          format.timestamp(),
           format.colorize(),
           format.simple(),
           // pretty(config.get('service.env')),
