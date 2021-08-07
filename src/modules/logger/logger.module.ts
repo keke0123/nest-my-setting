@@ -73,7 +73,6 @@ export const loggerFactory = (config: ConfigService) => {
     transports: [
       new transports.Console({
         format: format.combine(
-          // format.simple(),
           format.json(),
           format.colorize(),
           format.simple(),
@@ -93,6 +92,6 @@ const pretty = (env: string) => {
     //   // util.inspect(object, showHidden=false, depth=2, colorize=true);
     //   return `[${info.level}]:\x1b[36m${info.timestamp}\x1b[0m:[\x1b[33m${info.service}\x1b[0m]\n${inspect(info.message, false, 10, true)}`;
     // }
-    return `[${info.level}]:\x1b[36m${info.timestamp}\x1b[0m:[\x1b[33m${info.service}\x1b[0m]${typeof info.message == 'object' ? '\n' : ':'}${inspect(info.message, false, 3)}`;
+    return `[${info.level}]:\x1b[36m${info.timestamp}\x1b[0m:[\x1b[33m${info.service}\x1b[0m]${typeof info.message == 'object' ? '\n' : ':'}${info.message}` + `${info['0'] ? '\n' + inspect(info['0'], false, 5, true) : ''}`;
   })
 }
