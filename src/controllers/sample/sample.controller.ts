@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Inject, LoggerService, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Controller, Get, HttpStatus, Inject, LoggerService, Param, ParseIntPipe, Post, Query, Req } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { config, Observable, of } from 'rxjs';
@@ -8,6 +8,8 @@ import { SampleDefaultReturn } from 'src/types/dto/sample';
 
 import { ServiceException } from '../../utils/service-exception';
 import { Validation1Param } from './validation';
+import { RedisService } from 'src/modules/redis/redis.module';
+import { Request } from 'express';
 
 @ApiTags('sample')
 @Controller({ path: 'sample'})
@@ -17,6 +19,7 @@ export class SampleController {
     private readonly config: ConfigService,
     // private readonly logger: LoggerService,
     @Inject(PROVIDE.LOGGER) private readonly logger: CustomLoggerService,
+    @Inject(PROVIDE.REDIS) private readonly redis: RedisService,
   ) {}
 
 
@@ -56,6 +59,24 @@ export class SampleController {
   ): Observable<any> {
     this.logger.info('params', params);
     return of({ message: 'success', data: '' });
+  }
+
+  @Get('/redis/test')
+  async redisTest(@Req() request: Request): Promise<Observable<any>> {
+
+    const result = await this.redis.returnCacheData({
+      cacheKey: 'sample:redisTest',
+      func: () => 'test',
+      arg: [],
+      expireTime: 180,
+    });
+
+    this.logger.debug('result', result);
+
+    
+    return of({message: "success", data: {
+      cached: result,
+    }});
   }
 
 }

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RedisClient as Redis } from 'redis';
 import { PROVIDE } from 'src/references';
-import Bluebird from 'bluebird';
+import * as Bluebird from 'bluebird';
 
 @Module({
 	providers: [
@@ -29,7 +29,9 @@ const redisFactory = (config: ConfigService) => {
 		port: config.get('redis.port'),
 		db: config.get('redis.db'),
 	});
+	
 	client.getAsync = Bluebird.promisify(client.get).bind(client);
+
 	// Bluebird.promisifyAll(client.get).prototype;
 	// client.get = Promise.promisify(client.get).bind(client);
   // client.hmget = Promise.promisify(client.hmget).bind(client);
@@ -77,28 +79,3 @@ export class RedisService {
 		}
 	}
 }
-
-// export async function returnCacheData<T> ({cacheKey, func, arg, expireTime = 60}: ProxyReturnData) : Promise<T> {
-//   try {
-//     // console.log('expireTime', expireTime);
-//     const client = getRedisClient();
-//     const cache = await client.get(cacheKey);
-//     // console.log('cache', cache);
-//     if(!cache) {
-//       const result = await func(...arg);  
-//       client.set(
-//         cacheKey, 
-//         JSON.stringify(result),
-//         'EX',
-//         expireTime,
-//       );
-//       return result;
-//     }
-//     const payload = JSON.parse(cache);
-//     // console.log('payload', payload);
-//     return payload;
-//   } catch(error) {
-//     // console.log('cache error');
-//     return await func(...arg);
-//   }
-// }
