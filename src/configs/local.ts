@@ -11,6 +11,11 @@ export default {
     username: 'root',
     password: 'wjdgyqja88',
   },
+  redis: {
+    host: 'localhost',
+    port: 6378,
+    db: 0,
+  },
   slack: {
     url: {
       log: '',

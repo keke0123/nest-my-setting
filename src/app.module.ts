@@ -13,6 +13,7 @@ import { SlackService } from './services/slack/slack.service';
 
 import { PROVIDE } from './references';
 import { LoggerModule } from './modules/logger/logger.module';
+import { RedisModule } from './modules/redis/redis.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { LoggerModule } from './modules/logger/logger.module';
       }
     }),
     LoggerModule,
+    RedisModule,
   ],
   controllers: [AppController, SampleController],
   providers: [
